@@ -139,6 +139,36 @@ app's configuration without rebuilding the container.
 
 > 🔒 Secrets are stored encoded and should never appear in Git history.
 
+### 📦 Volume mount for secrets
+
+In addition to environment variables, the deployment now demonstrates
+how a `Secret` can be mounted as a filesystem volume. The pod spec
+includes:
+
+```yaml
+volumeMounts:
+- name: env-file
+  readOnly: true
+  mountPath: "/app/secret"
+volumes:
+- name: env-file
+  secret:
+    secretName: backend-secret
+```
+
+This creates `/app/secret` inside the container containing files named
+after each key in the secret (`database_url` in our case) with the
+decoded value. Applications can choose whichever mechanism suits them
+best – env vars, files, or both.
+
+```bash
+# inside the container you could cat the file
+kubectl exec -it deploy/todo-app-backend -- cat /app/secret/database_url
+```
+
+Using volumes is useful when you want to share multiple secrets or
+keep data off the process environment.
+
 ### Notes & best practices
 
 - `node_modules/` is ignored; never commit dependencies.
