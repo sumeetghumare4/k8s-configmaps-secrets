@@ -1,9 +1,30 @@
-apiVersion: v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: todo-app-backend
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: todo-app
+      app: ecom-backend
+  template:
+    metadata:
+      labels:
+        app: ecom-backend
+    spec:
+      containers:
+      - name: todo-backend
+        image: sumeetghumare/todo-app-test:1
+        ports:
+        - containerPort: 3000
+        env:
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: backend-config
+              key: port
+        - name: DATABASE_URl
+          valueFrom:
+            secretKeyRef:
+              name: backend-secret
+              key: database_url
