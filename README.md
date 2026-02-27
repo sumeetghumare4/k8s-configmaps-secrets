@@ -139,6 +139,8 @@ app's configuration without rebuilding the container.
 
 > 🔒 Secrets are stored encoded and should never appear in Git history.
 
+## For to practise I have used dummy credentials -> If you tried to encode you will get lo**pop
+
 ### 📦 Volume mount for secrets
 
 In addition to environment variables, the deployment now demonstrates
