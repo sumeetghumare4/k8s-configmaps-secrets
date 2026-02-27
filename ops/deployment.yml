@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: todo-app-backend
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: ecom-backend
@@ -17,14 +17,11 @@ spec:
         image: sumeetghumare/todo-app-test:1
         ports:
         - containerPort: 3000
-        env:
-        - name: PORT
-          valueFrom:
-            configMapKeyRef:
-              name: backend-config
-              key: port
-        - name: DATABASE_URl
-          valueFrom:
-            secretKeyRef:
-              name: backend-secret
-              key: database_url
+        volumeMounts:
+        - name: env-file
+          readOnly: true
+          mountPath: "/app/secret"
+      volumes:
+      - name: env-file
+        secret:
+          secretName: backend-secret
